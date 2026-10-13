@@ -1,0 +1,1 @@
+window.MINING_GEO={"overlaps":[{"id":"o1","area":"m9","corridor":"h8","species":"humpback","at":[35.13,-32.08]}]};

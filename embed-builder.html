@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Embed builder · Pelagic Whale Corridor Atlas</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/fonts.css">
+<style>
+:root{--bg:#0a1220;--surface:#0f1a2e;--raised:#15233b;--text:#eaf0ff;--muted:#a7b5d3;--dim:#8797b8;--line:rgba(158,176,228,.18);--accent:#c3cdfb;--mining:#d4f23c}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Satoshi',system-ui,sans-serif;font-size:15px;line-height:1.5}
+a{color:var(--accent)}
+.wrap{max-width:1240px;margin:0 auto;padding:28px 24px 48px}
+header{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+h1{font-size:1.5rem;font-weight:700;letter-spacing:-.03em;margin:0}
+header p{color:var(--muted);margin:4px 0 0;max-width:62ch}
+.grid{display:grid;grid-template-columns:340px minmax(0,1fr);gap:24px;align-items:start}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:20px}
+.panel h2{font-size:.78rem;letter-spacing:.12em;color:var(--dim);font-weight:500;margin:0 0 12px}
+label.f{display:block;margin-bottom:14px;font-size:.85rem;color:var(--muted)}
+select,input[type=number]{display:block;width:100%;margin-top:6px;padding:9px 10px;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:5px;font:inherit}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;margin-bottom:14px}
+.checks label{display:flex;gap:8px;align-items:center;font-size:.85rem;color:var(--text)}
+input[type=checkbox]{accent-color:var(--accent);width:16px;height:16px}
+select:focus-visible,input:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.out label{display:block;font-size:.78rem;letter-spacing:.1em;color:var(--dim);margin:0 0 6px}
+textarea{width:100%;min-height:74px;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:5px;padding:10px;font:12px/1.5 ui-monospace,Menlo,monospace;resize:vertical}
+.row{display:flex;gap:8px;align-items:center;margin:8px 0 16px;flex-wrap:wrap}
+button.b{background:var(--raised);color:var(--text);border:1px solid var(--line);border-radius:5px;padding:8px 14px;font:inherit;font-size:.85rem;cursor:pointer}
+button.b:hover{border-color:var(--accent)}
+.note{font-size:.8rem;color:var(--muted);border-left:2px solid var(--mining);padding:4px 0 4px 12px;margin:16px 0 0}
+.preview{margin-top:8px;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#000}
+.preview iframe{display:block;width:100%;border:0}
+.status{font-size:.8rem;color:var(--accent);min-height:1.2em}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+ <div><h1>Embed builder</h1><p>Set up a compact view of the atlas for an ArcGIS StoryMaps Embed block. Copy the link, paste it into the block, and check the live preview below.</p></div>
+ <a href="index.html">Open full atlas</a>
+</header>
+<div class="grid">
+ <section class="panel" aria-label="View options">
+  <h2>VIEW</h2>
+  <label class="f">Ocean region
+   <select id="region"><option value="">All ocean regions</option><option>North Pacific</option><option>North Atlantic</option><option>South Pacific</option><option>South Atlantic</option><option>Indian Ocean</option><option>Southern Ocean</option></select></label>
+  <label class="f">Month
+   <select id="month"><option value="">Annual view</option><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select></label>
+  <label class="f">Watchlist type
+   <select id="panel"><option value="">Whale pressure</option><option value="mining">Deep sea mining</option></select></label>
+  <label class="f">Watchlist on load
+   <select id="open"><option value="">Closed</option><option value="watchlist">Open watchlist</option><option value="layers">Open layers</option></select></label>
+  <h2>LAYERS</h2>
+  <div class="checks" id="layers">
+   <label><input type="checkbox" value="blue" checked>Blue whale</label>
+   <label><input type="checkbox" value="humpback" checked>Humpback whale</label>
+   <label><input type="checkbox" value="shipping" checked>Shipping lanes</label>
+   <label><input type="checkbox" value="fishing" checked>Fishing pressure</label>
+   <label><input type="checkbox" value="mining" checked>Deep sea mining</label>
+   <label><input type="checkbox" value="waypoints" checked>Waypoints</label>
+   <label><input type="checkbox" value="threats" checked>Threat intersections</label>
+  </div>
+  <h2>APPEARANCE</h2>
+  <label class="f">Interface theme
+   <select id="theme"><option value="dark">Dark</option><option value="light">Light</option></select></label>
+  <div class="checks"><label><input type="checkbox" id="sat" checked>Satellite imagery</label></div>
+  <label class="f">Embed height (px)
+   <input type="number" id="height" value="620" min="360" max="1200" step="20"></label>
+ </section>
+ <section aria-label="Embed output">
+  <div class="panel out">
+   <h2>EMBED OUTPUT</h2>
+   <label for="url">Link for the StoryMaps Embed block</label>
+   <textarea id="url" readonly></textarea>
+   <div class="row"><button class="b" id="copy-url">Copy link</button><span class="status" id="status" role="status"></span></div>
+   <label for="code">iframe code, for other web pages</label>
+   <textarea id="code" readonly></textarea>
+   <div class="row"><button class="b" id="copy-code">Copy iframe code</button></div>
+   <p class="note">StoryMaps shows live embeds only from HTTPS pages that do not block framing. Host this folder on a site that allows framing. If the host blocks it, the block falls back to a link card that opens the atlas in a new tab.</p>
+  </div>
+  <div class="preview"><iframe id="preview" title="Embed preview" loading="lazy"></iframe></div>
+ </section>
+</div>
+</div>
+<script>
+(function(){
+ const $=id=>document.getElementById(id);
+ const base=new URL('index.html',location.href).href;
+ function build(){
+  const p=new URLSearchParams();p.set('embed','1');
+  if($('region').value)p.set('region',$('region').value);
+  if($('month').value)p.set('month',$('month').value);
+  if($('panel').value)p.set('panel',$('panel').value);
+  if($('open').value)p.set('open',$('open').value);
+  const boxes=[...document.querySelectorAll('#layers input')];const on=boxes.filter(b=>b.checked).map(b=>b.value);
+  if(on.length<boxes.length)p.set('layers',on.join(','));
+  p.set('theme',$('theme').value);
+  if(!$('sat').checked)p.set('sat','0');
+  const url=base+'?'+p.toString().replace(/%2C/g,',');
+  const h=Math.min(1200,Math.max(360,parseInt($('height').value,10)||620));
+  $('url').value=url;
+  $('code').value='<iframe src="'+url+'" width="100%" height="'+h+'" style="border:0" title="Pelagic whale corridor atlas" allowfullscreen loading="lazy"></iframe>';
+  $('preview').style.height=h+'px';
+  if($('preview').dataset.src!==url){$('preview').dataset.src=url;$('preview').src=url;}
+ }
+ document.querySelectorAll('select,input').forEach(e=>e.addEventListener('change',build));
+ $('height').addEventListener('input',build);
+ function copy(id,msg){const t=$(id);t.select();(navigator.clipboard?navigator.clipboard.writeText(t.value):Promise.reject()).catch(()=>document.execCommand('copy')).finally(()=>{$('status').textContent=msg;setTimeout(()=>$('status').textContent='',2200);});}
+ $('copy-url').addEventListener('click',()=>copy('url','Link copied'));
+ $('copy-code').addEventListener('click',()=>copy('code','Embed code copied'));
+ build();
+})();
+</script>
+</body>
+</html>
